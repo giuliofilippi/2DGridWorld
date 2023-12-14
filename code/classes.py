@@ -16,28 +16,32 @@ class World:
         self.grid = np.zeros((width, length))  # Assuming the grid represents some state information.
         self.pheromones = np.zeros((width, length))  # Initialize pheromones with zeros.
 
-    def diffuse_tensor(self, tensor, diffusion_rate=0.2):
+    def diffuse_pheromones(self, diffusion_rate=0.2, num_iterations=1):
         """
-        Diffuses a given tensor in the world.
+        Diffuses pheromones in the world.
 
         Parameters:
-        - tensor: The tensor to be diffused.
-        - diffusion_rate: Rate at which the tensor diffuses.
+        - diffusion_rate: Rate at which the array diffuses.
+        - num_iterations: Number of diffusion iterations.
 
         Note: This method assumes periodic boundary conditions.
         """
-        for i in range(self.width):
-            for j in range(self.length):
-                # Implement diffusion with periodic boundary conditions
-                left = tensor[(i - 1) % self.width, j]
-                right = tensor[(i + 1) % self.width, j]
-                up = tensor[i, (j - 1) % self.length]
-                down = tensor[i, (j + 1) % self.length]
+        for _ in range(num_iterations):
+            new_pheromones = self.pheromones.copy()
+            for i in range(self.width):
+                for j in range(self.length):
+                    # Implement diffusion with periodic boundary conditions
+                    left = self.pheromones[(i - 1) % self.width, j]
+                    right = self.pheromones[(i + 1) % self.width, j]
+                    up = self.pheromones[i, (j - 1) % self.length]
+                    down = self.pheromones[i, (j + 1) % self.length]
 
-                self.pheromones[i, j] = (
-                    (1 - diffusion_rate) * tensor[i, j]
-                    + (diffusion_rate / 4) * (left + right + up + down)
-                )
+                    new_pheromones[i, j] = (
+                        (1 - diffusion_rate) * self.pheromones[i, j]
+                        + (diffusion_rate / 4) * (left + right + up + down)
+                    )
+            self.pheromones = new_pheromones
+        return self.pheromones
 
 # Agent class
 class Agent:
@@ -54,7 +58,7 @@ class Agent:
         """
 
         if initial_pos is None:
-            initial_pos = self.random_empty_position()
+            initial_pos = self.random_empty_position(world)
 
         if initial_state is None:
             initial_state = np.random.choice([0, 1])  # Assuming states are 0 or 1
