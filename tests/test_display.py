@@ -12,13 +12,10 @@ from classes import World, Agent
 from display import render
 
 # Assuming you have a World instance with grid and pheromones attributes
-world = World(width=10, length=10)
-agent = Agent(world)
-world.grid[5, 5] = 1  # Set an example state in the grid
-world.pheromones[3, 3] = 10  # Set an example pheromone concentration
-
-# test diffusion
-world.diffuse_pheromones(0.5, 10)
+world = World(width=100, length=100)
+agents = [Agent(world) for _ in range(50)]
+world.pheromones[[50,20,2], [50,20,2]] = 100  # Set an example pheromone concentration
+world.diffuse_pheromones(0.5, 100) # diffuse
 
 # Visualize the world state
-render(world.grid, world.pheromones, show=True, save=False, name="example_image.png")
+render(world.grid, world.pheromones, show=True, save=True, name="example_image.png")
