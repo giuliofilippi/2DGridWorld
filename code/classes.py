@@ -42,6 +42,19 @@ class World:
                     )
             self.pheromones = new_pheromones
         return self.pheromones
+    
+    def evaporate_pheromones(self, evaporation_rate=0.2, num_iterations=1):
+        """
+        Evaporates pheromones.
+
+        Parameters:
+        - evaporation_rate: Rate at which the array evaporates.
+        - num_iterations: Number of iterations.
+
+        """
+        for _ in range(num_iterations):
+            self.pheromones = (1-evaporation_rate)*self.pheromones
+        return self.pheromones
 
 # Agent class
 class Agent:
@@ -61,7 +74,7 @@ class Agent:
             initial_pos = self.random_empty_position(world)
 
         if initial_state is None:
-            initial_state = np.random.choice([0, 1])  # Assuming states are 0 or 1
+            initial_state = np.random.choice([0, 1])
 
         self.pos = initial_pos
         self.state = initial_state
