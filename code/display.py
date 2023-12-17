@@ -38,8 +38,8 @@ def render(grid_data, pheromone_data, show=True, save=False, name="image.png"):
     ax.spines['left'].set_color('white')
     ax.spines['right'].set_color('white')
 
-    if show:
-        plt.show()
-
     if save:
         plt.savefig(name)  # Save
+
+    if show:
+        plt.show()
